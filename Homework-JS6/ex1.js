@@ -4,16 +4,16 @@ const database = [
     { id: 3, name: "pisey" },
 ];
 
-function getUserId(id, callback) {
-    setTimeout(() => {
-        const userId = database.find((user) => user.id === id);
-        if (userId) {
-            callback(null, userId);
-        } else {
-            console.log("User not found");
-        }
-    }, 2000);
-}
+// function getUserId(id, callback) {
+//     setTimeout(() => {
+//         const userId = database.find((user) => user.id === id);
+//         if (userId) {
+//             callback(null, userId);
+//         } else {
+//             console.log("User not found");
+//         }
+//     }, 2000);
+// }
 
 function processUser(user, callback) {
     setTimeout(() => {
@@ -29,15 +29,36 @@ function processUser(user, callback) {
     }, 1500);
 }
 
-getUserId(2, (err, data) => {
-    if (err) {
-        console.log("Not Found");
-    } else {
-        processUser(data, (err, processedUser) => {
-            if (err) {
-                console.log("Not process");
+// getUserId(2, (err, data) => {
+//     if (err) {
+//         console.log("Not Found");
+//     } else {
+//         processUser(data, (err, processedUser) => {
+//             if (err) {
+//                 console.log("Not process");
+//             }
+//             console.log(processedUser);
+//         });
+//     }
+// });
+
+function updateById(id, newUserData) {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            const userId = database.findIndex((user) => user.id === id);
+            if (userId) {
+                database[userId] = { id, ...newUserData };
+                resolve(database[userId]);
+            } else {
+                reject("User not found");
             }
-            console.log(processedUser);
-        });
-    }
-});
+        }, 1000);
+    });
+}
+
+updateById(2, { name: "ok" })
+    .then((updatedUser) => {
+        console.log("Update", updatedUser);
+        console.log(database);
+    })
+    .catch((err) => console.log(err));
